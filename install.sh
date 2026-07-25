@@ -23,7 +23,7 @@ sudo apt-get update && sudo apt-get upgrade -y
 # 3. Instalación de Paquetes APT
 # ------------------------------------------------------------------------------
 echo "📦 Instalando paquetes esenciales desde APT..."
-sudo apt-get install -y zsh kitty btop git curl ufw cowsay fortune-mod fortunes fortunes-es software-properties-common flatpak kdeconnect zsh-autosuggestions zsh-syntax-highlighting
+sudo apt-get install -y zsh kitty btop git curl ufw cowsay fortune-mod fortunes fortunes-es software-properties-common flatpak kdeconnect zsh-autosuggestions zsh-syntax-highlighting steam-devices
 
 # ------------------------------------------------------------------------------
 # 3.5 Instalación de Oh My Zsh
