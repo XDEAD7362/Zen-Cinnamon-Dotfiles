@@ -33,7 +33,7 @@ El script `install.sh` prioriza paquetes en formato **Flatpak** y repositorios o
 
 ## 📂 Estructura del Repositorio
 
-
+```text
 dotfiles/
 ├── bin/                       # Scripts ejecutables personales (~/.local/bin)
 ├── kitty/                     # Configuración de Kitty Terminal
@@ -45,23 +45,23 @@ dotfiles/
 ├── install.sh                 # Script maestro de post-instalación
 ├── .gitignore                 # Reglas de exclusión para credenciales y datos sensibles
 └── README.md                  # Documentación del proyecto text
+```
 
-
-⚡ Instalación en un Sistema Nuevo (Linux Mint)
+## ⚡ Instalación en un Sistema Nuevo (Linux Mint)
 ​Para aplicar todas las configuraciones y desplegar el software en una instalación limpia de Linux Mint, abre una terminal y ejecuta:
 
-# 1. Clonar el repositorio en tu carpeta personal
-git clone [https://github.com/TU_USUARIO/dotfiles.git](https://github.com/TU_USUARIO/dotfiles.git) ~/dotfiles
+* **1. Clonar el repositorio en tu carpeta personal**
+git clone https://github.com/XDEAD7362/Zen-Cinnamon-Dotfiles.git ~/dotfiles
 
-# 2. Navegar al directorio
+* **2. Navegar al directorio**
 cd ~/dotfiles
 
-# 3. Dar permisos de ejecución e iniciar la instalación
+* **3. Dar permisos de ejecución e iniciar la instalación**
 chmod +x install.sh
 ./install.sh
 
-​⚠️ Nota de seguridad: El script install.sh renombrará automáticamente tus archivos de configuración existentes (.zshrc, etc.) agregándoles la extensión .backup antes de crear los enlaces simbólicos (symlinks), evitando así la pérdida accidental de datos.
+​## ⚠️ Nota de seguridad: El script install.sh renombrará automáticamente tus archivos de configuración existentes (.zshrc, etc.) agregándoles la extensión .backup antes de crear los enlaces simbólicos (symlinks), evitando así la pérdida accidental de datos.
 
 
-​📜 Licencia
+​## 📜 Licencia
 ​Libre para uso personal y modificación (MIT License). Adaptado para flujos de trabajo sobre Linux Mint Cinnamon.
