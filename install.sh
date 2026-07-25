@@ -40,6 +40,34 @@ sudo apt-get install -y tlp-ui
 echo "🦁 Instalando Brave Origin..."
 curl -fsS https://dl.brave.com/install.sh | FLAVOR=origin sh
 
+# -----------------------------------------------------
+# Instalación de Docker y Docker Compose
+# -----------------------------------------------------
+echo "🐳 Instalando Docker y Docker Compose..."
+
+# 1. Ejecutar el instalador oficial de Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+rm get-docker.sh
+
+# 2. Permitir usar Docker sin 'sudo' (tomará efecto al reiniciar)
+sudo usermod -aG docker $USER
+
+# -----------------------------------------------------
+# Despliegue de Contenedores Iniciales
+# -----------------------------------------------------
+echo "🐬 Creando contenedor permanente de MySQL..."
+
+# 3. Descargar y ejecutar MySQL en segundo plano (-d)
+# - Expone el puerto 3306
+# - Establece contraseña root (puedes cambiar 'root_password' por la que prefieras)
+# - Configura el reinicio automático
+sudo docker run --name mysql-docker \
+  -e MYSQL_ROOT_PASSWORD=root_password \
+  -p 3306:3306 \
+  --restart always \
+  -d mysql:latest
+
 # ------------------------------------------------------------------------------
 # 5. Instalación de Aplicaciones Flatpak
 # ------------------------------------------------------------------------------
