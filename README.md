@@ -15,7 +15,7 @@ Este repositorio contiene mi configuración personal (*dotfiles*), temas visuale
 * **Tema de aplicaciones:** `Orchis-Grey-Dark`
 * **Tema de escritorio:** `WhiteSur-Dark-solid-grey`
 * **Tema de íconos:** `Mint-Y-Yaru`
-* **Tema Oscuro Global Forzado** `Tanto a nivel de sistema (GT3 y GTK4 / Libadwaita) como a nivel de aplicaciones Flatpak`
+* **Tema Oscuro Global Forzado** Tanto a nivel de sistema `(GT3 y GTK4 / Libadwaita)` como a nivel de aplicaciones `Flatpak`
 * **Configuración de Cinnamon:** Respaldo y restauración completa mediante exportación `dconf`.
 
 ### 📦 Software y Aplicaciones
