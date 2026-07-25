@@ -170,6 +170,14 @@ if [ -f "$HOME/dotfiles/cinnamon-settings.dconf" ]; then
 fi
 
 # ------------------------------------------------------------------------------
+# 9.5. Forzar Modo Oscuro Global
+# ------------------------------------------------------------------------------
+echo "🌙 Forzando modo oscuro en todo el sistema..."
+gsettings set org.cinnamon.desktop.interface color-scheme 'prefer-dark'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+sudo flatpak override --env=GTK_THEME=Mint-Y-Dark
+
+# ------------------------------------------------------------------------------
 # 10. Copiar Script de UFW a NetworkManager Dispatcher
 # ------------------------------------------------------------------------------
 echo "🛡️ Configurando script de UFW en NetworkManager..."
