@@ -22,7 +22,7 @@ El script `install.sh` prioriza paquetes en formato **Flatpak**, repositorios of
 * **Limpieza inicial:** Purga automática de Firefox y LibreOffice preinstalados.
 * **Navegador:** Brave Origin (instalado mediante script oficial).
 * **Ofimática y Gestión:** ONLYOFFICE, Obsidian, Thunderbird.
-* **Desarrollo y Sistema:** DBeaver CE, Flatseal, Gear Lever, btop, Fastfetch, KDE Connect.
+* **Desarrollo y Sistema:** DBeaver CE, Flatseal, Gear Lever, btop, Fastfetch, KDE Connect, Google Antigravity CLI.
 * **Virtualización y Contenedores:** Docker Engine + Docker Compose (instalación oficial) y permiso de usuario sin `sudo`.
 * **Bases de Datos:** Contenedor persistente de **MySQL** (`mysql-docker`) desplegado automáticamente con `--restart always` en el puerto `3306`.
 * **Entretenimiento / Multimedia:** VLC, Steam.
