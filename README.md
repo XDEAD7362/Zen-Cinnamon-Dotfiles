@@ -59,9 +59,8 @@ cd ~/dotfiles
 * **3. Dar permisos de ejecución e iniciar la instalación**
 chmod +x install.sh
 ./install.sh
+​
+## ⚠️ Nota de seguridad: El script install.sh renombrará automáticamente tus archivos de configuración existentes (.zshrc, etc.) agregándoles la extensión .backup antes de crear los enlaces simbólicos (symlinks), evitando así la pérdida accidental de datos.
 
-​## ⚠️ Nota de seguridad: El script install.sh renombrará automáticamente tus archivos de configuración existentes (.zshrc, etc.) agregándoles la extensión .backup antes de crear los enlaces simbólicos (symlinks), evitando así la pérdida accidental de datos.
-
-
-​## 📜 Licencia
+## 📜 Licencia
 ​Libre para uso personal y modificación (MIT License). Adaptado para flujos de trabajo sobre Linux Mint Cinnamon.
