@@ -27,7 +27,7 @@ sudo apt-get update && sudo apt-get upgrade -y
 # 3. Instalación de Paquetes APT y TLP UI
 # ------------------------------------------------------------------------------
 echo "📦 Instalando paquetes esenciales desde APT..."
-sudo apt-get install -y zsh kitty git curl ufw cowsay fortune tlp tlp-rdw software-properties-common flatpak
+sudo apt-get install -y zsh kitty git curl ufw cowsay fortune tlp tlp-rdw software-properties-common flatpak fastfetch kdeconnect
 
 echo "➕ Agregando PPA para tlp-ui..."
 sudo add-apt-repository -y ppa:linuxuprising/apps
