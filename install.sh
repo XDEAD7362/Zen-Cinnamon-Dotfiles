@@ -23,7 +23,7 @@ sudo apt-get update && sudo apt-get upgrade -y
 # 3. Instalación de Paquetes APT
 # ------------------------------------------------------------------------------
 echo "📦 Instalando paquetes esenciales desde APT..."
-sudo apt-get install -y zsh kitty btop git curl ufw cowsay fortune-mod fortunes fortunes-es software-properties-common flatpak kdeconnect zsh-autosuggestions zsh-syntax-highlighting steam-devices
+sudo apt-get install -y zsh kitty btop git curl ufw cowsay fortune-mod fortunes fortunes-es software-properties-common flatpak kdeconnect zsh-autosuggestions zsh-syntax-highlighting fonts-inter unzip
 
 # ------------------------------------------------------------------------------
 # 3.5 Instalación de Oh My Zsh
@@ -45,10 +45,10 @@ echo "⚡ Iniciando servicio TLP..."
 sudo tlp start
 
 echo "🔋 Instalando TLP UI..."
-sudo rm -rf /opt/TLPUI # Previene errores si corres el script más de una vez
+sudo rm -rf /opt/TLPUI
 sudo git clone https://github.com/d4nj1/TLPUI.git /opt/TLPUI
 
-echo "🚀 Configurando acceso directo..."
+echo "🚀 Configurando acceso directo a TLP UI..."
 sudo tee /usr/share/applications/tlpui.desktop > /dev/null <<EOF
 [Desktop Entry]
 Name=TLP UI
@@ -63,7 +63,7 @@ EOF
 echo "✅ ¡TLP y TLP UI instalados correctamente!"
 
 # -----------------------------------------------------
-# 4. Instalación de Docker y Docker Compose
+# 4.1 Instalación de Docker y Docker Compose
 # -----------------------------------------------------
 echo "🐳 Instalando Docker y Docker Compose..."
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -73,32 +73,26 @@ rm get-docker.sh
 sudo usermod -aG docker $USER
 
 # -----------------------------------------------------
-# 4.5 Despliegue de Contenedores Iniciales
+# 4.2 Despliegue de Contenedores Iniciales
 # -----------------------------------------------------
 echo "🐬 Creando contenedor permanente de MySQL..."
 sudo docker run --name mysql-docker \
   -e MYSQL_ROOT_PASSWORD=root_password \
   -p 3306:3306 \
   --restart always \
-  -d mysql:latest
+  -d mysql:latest || true
 
 # ------------------------------------------------------------------------------
-# 5. Instalaciones Personalizadas: Brave Origin
+# 5. Instalaciones Personalizadas
 # ------------------------------------------------------------------------------
 echo "🦁 Instalando Brave Origin..."
 curl -fsS https://dl.brave.com/install.sh | FLAVOR=origin sh
 
-# -----------------------------------------------------
-# 5. Instalaciones Personalizadas: Fastfetch (Vía GitHub)
-# -----------------------------------------------------
 echo "🚀 Descargando e instalando Fastfetch..."
 wget -q --show-progress https://github.com/fastfetch-cli/fastfetch/releases/latest/download/fastfetch-linux-amd64.deb
 sudo apt-get install -y ./fastfetch-linux-amd64.deb
 rm fastfetch-linux-amd64.deb
 
-# ------------------------------------------------------------------------------
-# Instalaciones personalizadas: Antigravity CLI
-# ------------------------------------------------------------------------------
 echo "🛸 Instalando Antigravity CLI..."
 curl -fsSL https://antigravity.google/cli/install.sh | bash
 
@@ -138,7 +132,7 @@ fi
 
 echo "🔗 Configurando dotfiles y enlaces simbólicos..."
 [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ] && mv ~/.zshrc ~/.zshrc.backup
-mkdir -p ~/.config ~/.local
+mkdir -p ~/.config ~/.local ~/.local/share/cinnamon ~/.local/share/fonts
 
 # Respaldos de configuraciones existentes
 [ -d ~/.config/kitty ] && [ ! -L ~/.config/kitty ] && mv ~/.config/kitty ~/.config/kitty.backup
@@ -150,8 +144,14 @@ ln -sf "$HOME/dotfiles/.zshrc" "$HOME/.zshrc"
 ln -sf "$HOME/dotfiles/.config/kitty" "$HOME/.config/kitty"
 ln -sf "$HOME/dotfiles/.config/fastfetch" "$HOME/.config/fastfetch"
 ln -sf "$HOME/dotfiles/.local/bin" "$HOME/.local/bin"
-mkdir -p ~/.local/share/cinnamon
-ln -sf "$HOME/dotfiles/.local/share/cinnamon/applets" "$HOME/.local/share/cinnamon/applets"
+
+if [ -d "$HOME/dotfiles/.local/share/cinnamon/applets" ]; then
+    ln -sf "$HOME/dotfiles/.local/share/cinnamon/applets" "$HOME/.local/share/cinnamon/applets"
+fi
+if [ -d "$HOME/dotfiles/.local/share/fonts" ]; then
+    ln -sf "$HOME/dotfiles/.local/share/fonts" "$HOME/.local/share/fonts"
+    fc-cache -f
+fi
 
 # ------------------------------------------------------------------------------
 # 8. Cambiar Shell por Defecto a Zsh
@@ -162,20 +162,17 @@ if [ "$SHELL" != "$(which zsh)" ]; then
 fi
 
 # ------------------------------------------------------------------------------
-# 9. Restaurar Configuración de Cinnamon
+# 9. Restaurar Configuración de Cinnamon y Modo Oscuro
 # ------------------------------------------------------------------------------
 echo "🖥️ Restaurando configuración visual de Cinnamon..."
 if [ -f "$HOME/dotfiles/cinnamon-settings.dconf" ]; then
     dconf load /org/cinnamon/ < "$HOME/dotfiles/cinnamon-settings.dconf"
 fi
 
-# ------------------------------------------------------------------------------
-# 9.5. Forzar Modo Oscuro Global
-# ------------------------------------------------------------------------------
 echo "🌙 Forzando modo oscuro en todo el sistema..."
-gsettings set org.cinnamon.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-sudo flatpak override --env=GTK_THEME=Mint-Y-Dark
+gsettings set org.cinnamon.desktop.interface color-scheme 'prefer-dark' || true
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' || true
+sudo flatpak override --env=GTK_THEME=Mint-Y-Dark || true
 
 # ------------------------------------------------------------------------------
 # 10. Copiar Script de UFW a NetworkManager Dispatcher
@@ -187,5 +184,4 @@ if [ -f "$HOME/dotfiles/ufw-script/99-ufw-automount.sh" ]; then
     sudo chmod +x /etc/NetworkManager/dispatcher.d/99-ufw-automount.sh
 fi
 
-echo "✅ ¡Proceso de post-instalación completado con éxito! Reinicia tu sistema o sesión para aplicar todos los cambios."
-
+echo "✅ ¡Proceso de post-instalación completado con éxito! Reinicia tu sistema o sesión."
