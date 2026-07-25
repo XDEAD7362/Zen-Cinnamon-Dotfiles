@@ -1,0 +1,28 @@
+# Archivos de historial
+.zsh_history
+.bash_history
+*.history
+
+# Llaves SSH y certificados
+.ssh/
+id_rsa
+id_rsa.pub
+*.pem
+*.key
+*.pub
+
+# Archivos de credenciales y tokens
+.env
+*.env
+*token*
+*secret*
+*credential*
+credentials.json
+
+# Archivos temporales y de sistema
+.DS_Store
+*.tmp
+*.log
+*.bak
+*.backup
+.local/bin/agy*
