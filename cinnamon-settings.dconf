@@ -16,7 +16,7 @@ window-effect-speed=0
 picture-uri='file:///home/lauty/mountfujibackround.jpg'
 
 [desktop/input-sources]
-sources=[('xkb', 'us')]
+sources=[('xkb', 'latam')]
 
 [desktop/interface]
 cursor-blink-time=1200
@@ -60,6 +60,7 @@ repeat-interval=uint32 30
 [desktop/screensaver]
 default-message='Esperando... Zzz...'
 font-time='Ubuntu Medium 64'
+layout-group=0
 time-format='%H:%M:%S'
 use-custom-format=true
 
@@ -92,6 +93,9 @@ draggable-border-width=10
 
 [settings-daemon/peripherals/keyboard]
 numlock-state='on'
+
+[settings-daemon/plugins/color]
+night-light-last-coordinates=(-24.783332999999999, -65.416667000000004)
 
 [settings-daemon/plugins/power]
 button-power='interactive'

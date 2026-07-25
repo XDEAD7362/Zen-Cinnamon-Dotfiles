@@ -112,10 +112,6 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fastfetch
 fortune es | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n 1 | cut -d. -f1)
 
-# Atajos para controlar la batería Asus
-alias bat-casa="sudo sed -i 's/<<< .*/<<< 60/' /etc/systemd/system/limitar-bateria.service && sudo systemctl daemon-reload && sudo systemctl restart limitar-bateria.service && echo 'Modo Casa Activo: Límite al 60% y aplicado.'"
-alias bat-viaje="sudo sed -i 's/<<< .*/<<< 100/' /etc/systemd/system/limitar-bateria.service && sudo systemctl daemon-reload && sudo systemctl restart limitar-bateria.service && echo 'Modo Viaje Activo: Límite al 100% y aplicado.'"
-
 # Atajos terminal
 alias confzsh="nano ~/.zshrc && clear && source ~/.zshrc"
 alias confkitty="nano ~/.config/kitty/kitty.conf"
@@ -129,3 +125,6 @@ export TERM=xterm-256color
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[path]='fg=blue,bold'
+
+# Cambiar color de los comentarios para que no sean invisibles
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#888888,bold'

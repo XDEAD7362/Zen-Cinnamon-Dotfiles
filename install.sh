@@ -2,10 +2,6 @@
 # ==============================================================================
 # Script de Post-Instalación y Migración a Linux Mint (Cinnamon)
 # ==============================================================================
-# Este script automatiza la instalación de paquetes, limpieza de software no
-# deseado, configuración de temas, restauraciones de dotfiles y configuraciones
-# del sistema.
-# ==============================================================================
 
 set -e
 
@@ -24,44 +20,62 @@ echo "🔄 Actualizando repositorios y el sistema..."
 sudo apt-get update && sudo apt-get upgrade -y
 
 # ------------------------------------------------------------------------------
-# 3. Instalación de Paquetes APT y TLP UI
+# 3. Instalación de Paquetes APT
 # ------------------------------------------------------------------------------
 echo "📦 Instalando paquetes esenciales desde APT..."
-sudo apt-get install -y zsh kitty git curl ufw cowsay fortune tlp tlp-rdw software-properties-common flatpak fastfetch kdeconnect
-
-echo "➕ Agregando PPA para tlp-ui..."
-sudo add-apt-repository -y ppa:linuxuprising/apps
-sudo apt-get update
-sudo apt-get install -y tlp-ui
+sudo apt-get install -y zsh kitty btop git curl ufw cowsay fortune-mod fortunes fortunes-es software-properties-common flatpak kdeconnect zsh-autosuggestions zsh-syntax-highlighting
 
 # ------------------------------------------------------------------------------
-# 4. Instalación Personalizada: Brave Origin
+# 3.5 Instalación de Oh My Zsh
 # ------------------------------------------------------------------------------
-echo "🦁 Instalando Brave Origin..."
-curl -fsS https://dl.brave.com/install.sh | FLAVOR=origin sh
+echo "🌟 Instalando Oh My Zsh..."
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+else
+    echo "Oh My Zsh ya está instalado."
+fi
+
+# ------------------------------------------------------------------------------
+# 4. Instalación de TLP y TLP UI
+# ------------------------------------------------------------------------------
+echo "📦 Instalando TLP y dependencias..."
+sudo apt install -y tlp tlp-rdw python3-gi gir1.2-gtk-3.0 git
+
+echo "⚡ Iniciando servicio TLP..."
+sudo tlp start
+
+echo "🔋 Instalando TLP UI..."
+sudo rm -rf /opt/TLPUI # Previene errores si corres el script más de una vez
+sudo git clone https://github.com/d4nj1/TLPUI.git /opt/TLPUI
+
+echo "🚀 Configurando acceso directo..."
+sudo tee /usr/share/applications/tlpui.desktop > /dev/null <<EOF
+[Desktop Entry]
+Name=TLP UI
+Comment=Interfaz gráfica para TLP
+Exec=python3 -m tlpui
+Path=/opt/TLPUI
+Icon=preferences-system
+Terminal=false
+Type=Application
+Categories=Settings;System;
+EOF
+echo "✅ ¡TLP y TLP UI instalados correctamente!"
 
 # -----------------------------------------------------
-# Instalación de Docker y Docker Compose
+# 4. Instalación de Docker y Docker Compose
 # -----------------------------------------------------
 echo "🐳 Instalando Docker y Docker Compose..."
-
-# 1. Ejecutar el instalador oficial de Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 rm get-docker.sh
 
-# 2. Permitir usar Docker sin 'sudo' (tomará efecto al reiniciar)
 sudo usermod -aG docker $USER
 
 # -----------------------------------------------------
-# Despliegue de Contenedores Iniciales
+# 4.5 Despliegue de Contenedores Iniciales
 # -----------------------------------------------------
 echo "🐬 Creando contenedor permanente de MySQL..."
-
-# 3. Descargar y ejecutar MySQL en segundo plano (-d)
-# - Expone el puerto 3306
-# - Establece contraseña root (puedes cambiar 'root_password' por la que prefieras)
-# - Configura el reinicio automático
 sudo docker run --name mysql-docker \
   -e MYSQL_ROOT_PASSWORD=root_password \
   -p 3306:3306 \
@@ -69,16 +83,35 @@ sudo docker run --name mysql-docker \
   -d mysql:latest
 
 # ------------------------------------------------------------------------------
-# 5. Instalación de Aplicaciones Flatpak
+# 5. Instalaciones Personalizadas: Brave Origin
+# ------------------------------------------------------------------------------
+echo "🦁 Instalando Brave Origin..."
+curl -fsS https://dl.brave.com/install.sh | FLAVOR=origin sh
+
+# -----------------------------------------------------
+# 5. Instalaciones Personalizadas: Fastfetch (Vía GitHub)
+# -----------------------------------------------------
+echo "🚀 Descargando e instalando Fastfetch..."
+wget -q --show-progress https://github.com/fastfetch-cli/fastfetch/releases/latest/download/fastfetch-linux-amd64.deb
+sudo apt-get install -y ./fastfetch-linux-amd64.deb
+rm fastfetch-linux-amd64.deb
+
+# ------------------------------------------------------------------------------
+# Instalaciones personalizadas: Antigravity CLI
+# ------------------------------------------------------------------------------
+echo "🛸 Instalando Antigravity CLI..."
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+
+# ------------------------------------------------------------------------------
+# 6. Instalación de Aplicaciones Flatpak
 # ------------------------------------------------------------------------------
 echo "📦 Configurando Flathub e instalando aplicaciones Flatpak..."
 sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 FLATPAK_APPS=(
-    "com.aristocratos.btop"
     "io.dbeaver.DBeaverCommunity"
     "com.github.tchx84.Flatseal"
-    "it.miSuper.GearLever"
+    "it.mijorus.gearlever"
     "md.obsidian.Obsidian"
     "org.onlyoffice.desktopeditors"
     "org.videolan.VLC"
@@ -92,33 +125,36 @@ for app in "${FLATPAK_APPS[@]}"; do
 done
 
 # ------------------------------------------------------------------------------
-# 6. Restauración de Temas e Iconos, Respaldos y Symlinks
+# 7. Restauración de Temas e Iconos, Respaldos y Symlinks
 # ------------------------------------------------------------------------------
 echo "🎨 Restaurando temas e iconos..."
 mkdir -p ~/.themes ~/.icons
 if [ -d "$HOME/dotfiles/themes" ]; then
-    cp -r "$HOME/dotfiles/themes/"* ~/.themes/
+    cp -r "$HOME/dotfiles/themes/"* ~/.themes/ || true
 fi
 if [ -d "$HOME/dotfiles/icons" ]; then
-    cp -r "$HOME/dotfiles/icons/"* ~/.icons/
+    cp -r "$HOME/dotfiles/icons/"* ~/.icons/ || true
 fi
 
 echo "🔗 Configurando dotfiles y enlaces simbólicos..."
-
-# Respaldar configuraciones existentes
 [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ] && mv ~/.zshrc ~/.zshrc.backup
 mkdir -p ~/.config ~/.local
 
+# Respaldos de configuraciones existentes
 [ -d ~/.config/kitty ] && [ ! -L ~/.config/kitty ] && mv ~/.config/kitty ~/.config/kitty.backup
+[ -d ~/.config/fastfetch ] && [ ! -L ~/.config/fastfetch ] && mv ~/.config/fastfetch ~/.config/fastfetch.backup
 [ -d ~/.local/bin ] && [ ! -L ~/.local/bin ] && mv ~/.local/bin ~/.local/bin.backup
 
 # Crear enlaces simbólicos
 ln -sf "$HOME/dotfiles/.zshrc" "$HOME/.zshrc"
 ln -sf "$HOME/dotfiles/.config/kitty" "$HOME/.config/kitty"
+ln -sf "$HOME/dotfiles/.config/fastfetch" "$HOME/.config/fastfetch"
 ln -sf "$HOME/dotfiles/.local/bin" "$HOME/.local/bin"
+mkdir -p ~/.local/share/cinnamon
+ln -sf "$HOME/dotfiles/.local/share/cinnamon/applets" "$HOME/.local/share/cinnamon/applets"
 
 # ------------------------------------------------------------------------------
-# 7. Cambiar Shell por Defecto a Zsh
+# 8. Cambiar Shell por Defecto a Zsh
 # ------------------------------------------------------------------------------
 echo "🐚 Cambiando shell por defecto a Zsh..."
 if [ "$SHELL" != "$(which zsh)" ]; then
@@ -126,7 +162,7 @@ if [ "$SHELL" != "$(which zsh)" ]; then
 fi
 
 # ------------------------------------------------------------------------------
-# 8. Restaurar Configuración de Cinnamon
+# 9. Restaurar Configuración de Cinnamon
 # ------------------------------------------------------------------------------
 echo "🖥️ Restaurando configuración visual de Cinnamon..."
 if [ -f "$HOME/dotfiles/cinnamon-settings.dconf" ]; then
@@ -134,7 +170,7 @@ if [ -f "$HOME/dotfiles/cinnamon-settings.dconf" ]; then
 fi
 
 # ------------------------------------------------------------------------------
-# 9. Copiar Script de UFW a NetworkManager Dispatcher
+# 10. Copiar Script de UFW a NetworkManager Dispatcher
 # ------------------------------------------------------------------------------
 echo "🛡️ Configurando script de UFW en NetworkManager..."
 if [ -f "$HOME/dotfiles/ufw-script/99-ufw-automount.sh" ]; then
@@ -144,3 +180,4 @@ if [ -f "$HOME/dotfiles/ufw-script/99-ufw-automount.sh" ]; then
 fi
 
 echo "✅ ¡Proceso de post-instalación completado con éxito! Reinicia tu sistema o sesión para aplicar todos los cambios."
+
