@@ -144,7 +144,9 @@ dotsync() {
     else
         git commit -m "$1"
     fi
-
+ 
+    # Sincronizar primero con la nube antes de subir
+    git pull --rebase origin main || true
     git push
 
     # Volver a donde estabas parado antes
