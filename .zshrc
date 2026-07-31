@@ -113,12 +113,60 @@ fastfetch
 fortune es | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n 1 | cut -d. -f1)
 
 # Atajos terminal
-alias confzsh="nano ~/.zshrc && clear && source ~/.zshrc"
+alias confzsh="nano ~/.zshrc && refresh"
 alias confkitty="nano ~/.config/kitty/kitty.conf"
 alias confmangohud="nano ~/.config/MangoHud/MangoHud.conf"
 alias refresh="clear && source ~/.zshrc"
 alias borrarhist="history -c && rm -f \$HISTFILE && exec zsh"
 alias server="ssh lauty@192.168.1.109"
+alias su="sudo"
+
+# Alias especiales
+# Alias para sincronizar Dotfiles
+dotsync() {
+    # Guardar directorio actual
+    local PREV_DIR=$(pwd)
+
+    echo "📦 Sincronizando dotfiles..."
+    cd ~/dotfiles || return
+
+    # Copiar applets descargados por si añadiste alguno nuevo
+    mkdir -p ~/.local/share/cinnamon/applets
+    cp -r ~/.local/share/cinnamon/applets/* ~/dotfiles/.local/share/cinnamon/applets/ 2>/dev/null || true
+
+    # Actualizar la configuración de Cinnamon
+    dconf dump /org/cinnamon/ > ~/dotfiles/cinnamon-settings.dconf
+
+    # Proceso de Git
+    git add .
+    if [ -z "$1" ]; then
+        git commit -m "Actualización de dotfiles: $(date +'%Y-%m-%d %H:%M')"
+    else
+        git commit -m "$1"
+    fi
+
+    git push
+
+    # Volver a donde estabas parado antes
+    cd "$PREV_DIR"
+    echo "✨ ¡Dotfiles actualizados y sincronizados con éxito!"
+}
+
+#Alias para ejecutar los juegos de IGE
+Play() {
+    local juego="$*"
+    # Buscamos el ejecutable en IGE
+    local ruta_exe=$(find "$HOME/IGE" -type f -iname "${juego}.exe" | head -n 1)
+
+    if [[ -n "$ruta_exe" && -f "$ruta_exe" ]]; then
+        echo "🎮 Iniciando '$juego' de forma segura..."
+        echo "🛡️  Motor: Bottles (Aislado sin red) | Entorno: IGE"
+        # Ejecutamos el juego dentro del contenedor Flatpak de Bottles usando la botella "Jaula"
+        flatpak run --command=bottles-cli com.usebottles.bottles run -b "IGE" -e "$ruta_exe"
+    else
+        echo "❌ Error: No se encontró '${juego}.exe' ni en $HOME/IGE ni en sus carpetas."
+    fi
+}
 
 # Forzar colores del tema essembeh
 export TERM=xterm-256color
