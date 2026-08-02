@@ -93,7 +93,7 @@ draggable-border-width=10
 numlock-state='on'
 
 [settings-daemon/plugins/color]
-night-light-last-coordinates=(-24.783332999999999, -65.416667000000004)
+night-light-last-coordinates=(-34.600000000000001, -58.450000000000003)
 
 [settings-daemon/plugins/power]
 button-power='interactive'

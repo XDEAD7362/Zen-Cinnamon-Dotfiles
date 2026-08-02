@@ -113,13 +113,13 @@ fastfetch
 fortune es | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n 1 | cut -d. -f1)
 
 # Atajos terminal
+alias refresh="clear && exec zsh"
 alias confzsh="nano ~/.zshrc && refresh"
-alias confkitty="nano ~/.config/kitty/kitty.conf"
 alias confmangohud="nano ~/.config/MangoHud/MangoHud.conf"
-alias refresh="clear && source ~/.zshrc"
-alias borrarhist="history -c && rm -f \$HISTFILE && exec zsh"
-alias server="ssh lauty@192.168.1.109"
+alias confkitty="nano ~/.config/kitty/kitty.conf && killall -USR1 kitty"
+alias borrarhist="rm -f \$HISTFILE && refresh"
 alias su="sudo"
+alias larp='~/Scripts/larp.sh'
 
 # Alias especiales
 # Alias para sincronizar Dotfiles
