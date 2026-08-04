@@ -66,6 +66,7 @@ event-sounds=false
 
 [desktop/wm/preferences]
 auto-raise=false
+button-layout=':minimize,maximize,close'
 focus-mode='mouse'
 min-window-opacity=30
 titlebar-font='Inter Medium 10'
@@ -88,6 +89,7 @@ tap-3='MEDIA_PLAY_PAUSE::end'
 [muffin]
 bring-windows-to-current-workspace=true
 draggable-border-width=10
+placement-mode='center'
 
 [settings-daemon/peripherals/keyboard]
 numlock-state='on'
