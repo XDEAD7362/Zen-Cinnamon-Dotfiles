@@ -113,13 +113,15 @@ fastfetch
 fortune es | cowsay -f $(ls /usr/share/cowsay/cows/ | shuf -n 1 | cut -d. -f1)
 
 # Atajos terminal
+alias borrarhist="rm -f \$HISTFILE && refresh"
 alias refresh="clear && exec zsh"
 alias confzsh="nano ~/.zshrc && refresh"
-alias confmangohud="nano ~/.config/MangoHud/MangoHud.conf"
 alias confkitty="nano ~/.config/kitty/kitty.conf && killall -USR1 kitty"
-alias borrarhist="rm -f \$HISTFILE && refresh"
+alias confmangohud="nano ~/.config/MangoHud/MangoHud.conf"
 alias su="sudo"
-alias larp='~/Scripts/larp.sh'
+alias bat-viaje="sudo tlp fullcharge && echo '🔋 Batería modo VIAJE: Límite 100%'"
+alias bat-mixto="sudo tlp setcharge 75 80 && echo '⚡ Batería modo MIXTO: Límite 80%'"
+alias bat-escritorio="sudo tlp setcharge 50 60 && echo '🔌 Batería modo ESCRITORIO: Límite 60%'"
 
 # Alias especiales
 # Alias para sincronizar Dotfiles
@@ -144,7 +146,7 @@ dotsync() {
     else
         git commit -m "$1"
     fi
- 
+
     # Sincronizar primero con la nube antes de subir
     git pull --rebase origin main || true
     git push
@@ -152,22 +154,6 @@ dotsync() {
     # Volver a donde estabas parado antes
     cd "$PREV_DIR"
     echo "✨ ¡Dotfiles actualizados y sincronizados con éxito!"
-}
-
-#Alias para ejecutar los juegos de IGE
-Play() {
-    local juego="$*"
-    # Buscamos el ejecutable en IGE
-    local ruta_exe=$(find "$HOME/IGE" -type f -iname "${juego}.exe" | head -n 1)
-
-    if [[ -n "$ruta_exe" && -f "$ruta_exe" ]]; then
-        echo "🎮 Iniciando '$juego' de forma segura..."
-        echo "🛡️  Motor: Bottles (Aislado sin red) | Entorno: IGE"
-        # Ejecutamos el juego dentro del contenedor Flatpak de Bottles usando la botella "Jaula"
-        flatpak run --command=bottles-cli com.usebottles.bottles run -b "IGE" -e "$ruta_exe"
-    else
-        echo "❌ Error: No se encontró '${juego}.exe' ni en $HOME/IGE ni en sus carpetas."
-    fi
 }
 
 # Forzar colores del tema essembeh
@@ -178,7 +164,3 @@ ZSH_HIGHLIGHT_STYLES[path]='fg=blue,bold'
 
 # Cambiar color de los comentarios para que no sean invisibles
 ZSH_HIGHLIGHT_STYLES[comment]='fg=#888888,bold'
-
-
-# Added by Antigravity CLI installer
-export PATH="/home/lauty/.local/bin:$PATH"

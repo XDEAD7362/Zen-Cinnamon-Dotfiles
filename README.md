@@ -15,7 +15,7 @@ Este repositorio contiene mi configuración personal (*dotfiles*), temas visuale
 * **Tema de aplicaciones:** `Orchis-Grey-Dark`
 * **Tema de escritorio:** `WhiteSur-Dark-solid-grey`
 * **Tema de íconos:** `Mint-Y-Yaru`
-* **Tema Oscuro Global Forzado** Tanto a nivel de sistema `(GT3 y GTK4 / Libadwaita)` como a nivel de aplicaciones `Flatpak`
+* **Tema Oscuro Global Seguro:** Aplicación nativa a nivel sistema (`GTK3 / GTK4 / Libadwaita`) y a través de portales XDG para `Flatpak` (evitando variables de entorno globales destructivas).
 * **Configuración de Cinnamon:** Respaldo y restauración completa mediante exportación `dconf`.
 
 ### 📦 Software y Aplicaciones
@@ -23,11 +23,11 @@ El script `install.sh` prioriza paquetes en formato **Flatpak**, repositorios of
 * **Limpieza inicial:** Purga automática de Firefox y LibreOffice preinstalados.
 * **Navegador:** Brave Origin (instalado mediante script oficial).
 * **Ofimática y Gestión:** ONLYOFFICE, Obsidian, Thunderbird.
-* **Desarrollo y Sistema:** DBeaver CE, Flatseal, Gear Lever, btop, Fastfetch, KDE Connect, Google Antigravity CLI.
-* **Virtualización y Contenedores:** Docker Engine + Docker Compose (instalación oficial) y permiso de usuario sin `sudo`.
-* **Bases de Datos:** Contenedor persistente de **MySQL** (`mysql-docker`) desplegado automáticamente con `--restart always` en el puerto `3306`.
+* **Desarrollo y Sistema:** DBeaver CE, Flatseal, Gear Lever, btop, Fastfetch, KDE Connect, Google Antigravity CLI (con sanitización automática de variables inyectadas).
+* **Virtualización y Contenedores:** Migración total a **Podman** (*rootless*). Incluye alias para compatibilidad con Docker sin requerir privilegios `sudo`.
+* **Bases de Datos:** Contenedor persistente de **MySQL** desplegado automáticamente mediante **systemd Quadlets** (`~/.config/containers/systemd/`), ejecutándose en el puerto `3306` como un servicio de usuario gestionado de forma segura.
 * **Entretenimiento / Multimedia:** VLC, Steam.
-* **Optimización de Batería:** TLP + TLP-UI.
+* **Optimización de Batería:** TLP + TLP-UI, complementado con alias en Zsh (`bat-viaje`, `bat-mixto`, `bat-escritorio`) para rotar límites de carga de hardware directamente desde la terminal.
 
 ### 🛡️ Red y Seguridad
 * Integra un script de automatización para **UFW** vinculado a NetworkManager (`dispatcher.d`).
@@ -36,7 +36,7 @@ El script `install.sh` prioriza paquetes en formato **Flatpak**, repositorios of
 
 ## 📂 Estructura del Repositorio
 
-```text
+```
 dotfiles/
 ├── bin/                       # Scripts ejecutables personales (~/.local/bin)
 ├── kitty/                     # Configuración de Kitty Terminal
@@ -47,7 +47,7 @@ dotfiles/
 ├── cinnamon-settings.dconf    # Volcado dconf de la interfaz gráfica
 ├── install.sh                 # Script maestro de post-instalación
 ├── .gitignore                 # Reglas de exclusión para credenciales y datos sensibles
-└── README.md                  # Documentación del proyecto text
+└── README.md                  # Documentación del proyecto
 ```
 
 ## ⚡ Instalación en un Sistema Nuevo (Linux Mint)

@@ -63,24 +63,44 @@ EOF
 echo "✅ ¡TLP y TLP UI instalados correctamente!"
 
 # -----------------------------------------------------
-# 4.1 Instalación de Docker y Docker Compose
+# 4.1 Instalación de Podman (Rootless)
 # -----------------------------------------------------
-echo "🐳 Instalando Docker y Docker Compose..."
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-rm get-docker.sh
-
-sudo usermod -aG docker $USER
+echo "🐳 Reemplazando Docker por Podman (Rootless)..."
+sudo apt-get install -y podman podman-docker dbus-user-session
 
 # -----------------------------------------------------
-# 4.2 Despliegue de Contenedores Iniciales
+# 4.2 Despliegue de MySQL con Podman y systemd (Quadlets)
 # -----------------------------------------------------
-echo "🐬 Creando contenedor permanente de MySQL..."
-sudo docker run --name mysql-docker \
-  -e MYSQL_ROOT_PASSWORD=root_password \
-  -p 3306:3306 \
-  --restart always \
-  -d mysql:latest || true
+echo "🐬 Configurando contenedor permanente de MySQL (Podman + systemd)..."
+
+# 1. Crear el directorio para los Quadlets de usuario
+mkdir -p ~/.config/containers/systemd/
+
+# 2. Crear el archivo declarativo del contenedor
+cat <<EOF > ~/.config/containers/systemd/mysql-docker.container
+[Unit]
+Description=Contenedor MySQL de Desarrollo (Podman)
+After=network-online.target
+
+[Container]
+Image=docker.io/library/mysql:latest
+ContainerName=mysql-docker
+Environment=MYSQL_ROOT_PASSWORD=root_password
+PublishPort=3306:3306
+
+[Install]
+WantedBy=default.target
+EOF
+
+# 3. Recargar systemd de usuario para que detecte el nuevo Quadlet
+systemctl --user daemon-reload
+
+# 4. Iniciar y habilitar el servicio para que arranque con el sistema
+systemctl --user enable --now mysql-docker.service
+
+# 5. Habilitar "lingering" para que el servicio inicie al bootear, 
+# sin necesidad de que el usuario inicie sesión gráfica primero
+sudo loginctl enable-linger $USER
 
 # ------------------------------------------------------------------------------
 # 5. Instalaciones Personalizadas
@@ -95,6 +115,13 @@ rm fastfetch-linux-amd64.deb
 
 echo "🛸 Instalando Antigravity CLI..."
 curl -fsSL https://antigravity.google/cli/install.sh | bash
+
+echo "🧹 Sanitizando variables tóxicas inyectadas por Antigravity..."
+# Eliminamos cualquier inyección destructiva que el instalador haya hecho en el sistema
+sudo sed -i '/QT_STYLE_OVERRIDE/d' /etc/environment || true
+sudo sed -i '/GTK_MODULES/d' /etc/environment || true
+sudo sed -i '/XDG_SESSION_TYPE/d' /etc/environment || true
+sed -i '/QT_STYLE_OVERRIDE/d' ~/.profile 2>/dev/null || true
 
 # ------------------------------------------------------------------------------
 # 6. Instalación de Aplicaciones Flatpak
@@ -169,10 +196,13 @@ if [ -f "$HOME/dotfiles/cinnamon-settings.dconf" ]; then
     dconf load /org/cinnamon/ < "$HOME/dotfiles/cinnamon-settings.dconf"
 fi
 
-echo "🌙 Forzando modo oscuro en todo el sistema..."
+echo "🌙 Forzando modo oscuro nativo y configurando Flatpak de forma segura..."
 gsettings set org.cinnamon.desktop.interface color-scheme 'prefer-dark' || true
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' || true
-sudo flatpak override --env=GTK_THEME=Mint-Y-Dark || true
+
+# Compartimos la config de temas con Flatpak usando portales XDG (sin variables --env)
+sudo flatpak override --user --filesystem=xdg-config/gtk-3.0:ro
+sudo flatpak override --user --filesystem=xdg-config/gtk-4.0:ro
 
 # ------------------------------------------------------------------------------
 # 10. Copiar Script de UFW a NetworkManager Dispatcher
