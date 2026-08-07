@@ -68,6 +68,7 @@ echo "✅ ¡TLP y TLP UI instalados correctamente!"
 echo "🐳 Reemplazando Docker por Podman (Rootless)..."
 sudo apt-get install -y podman podman-docker dbus-user-session
 
+
 # -----------------------------------------------------
 # 4.2 Despliegue de MySQL con Podman y systemd (Quadlets)
 # -----------------------------------------------------
@@ -76,15 +77,15 @@ echo "🐬 Configurando contenedor permanente de MySQL (Podman + systemd)..."
 # 1. Crear el directorio para los Quadlets de usuario
 mkdir -p ~/.config/containers/systemd/
 
-# 2. Crear el archivo declarativo del contenedor
-cat <<EOF > ~/.config/containers/systemd/mysql-docker.container
+# 2. Crear el archivo declarativo del contenedor con el nombre mysql-podman
+cat <<EOF > ~/.config/containers/systemd/mysql-podman.container
 [Unit]
 Description=Contenedor MySQL de Desarrollo (Podman)
 After=network-online.target
 
 [Container]
 Image=docker.io/library/mysql:latest
-ContainerName=mysql-docker
+ContainerName=mysql-podman
 Environment=MYSQL_ROOT_PASSWORD=root_password
 PublishPort=3306:3306
 
@@ -92,14 +93,11 @@ PublishPort=3306:3306
 WantedBy=default.target
 EOF
 
-# 3. Recargar systemd de usuario para que detecte el nuevo Quadlet
-systemctl --user daemon-reload
+# 3. Recargar systemd de usuario y arrancar el contenedor de forma segura
+systemctl --user daemon-reload || true
+systemctl --user start mysql-podman.service || true
 
-# 4. Iniciar y habilitar el servicio para que arranque con el sistema
-systemctl --user enable --now mysql-docker.service
-
-# 5. Habilitar "lingering" para que el servicio inicie al bootear, 
-# sin necesidad de que el usuario inicie sesión gráfica primero
+# 4. Habilitar "lingering" para que el servicio inicie al bootear sin sesión gráfica
 sudo loginctl enable-linger $USER
 
 # ------------------------------------------------------------------------------
@@ -201,8 +199,8 @@ gsettings set org.cinnamon.desktop.interface color-scheme 'prefer-dark' || true
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' || true
 
 # Compartimos la config de temas con Flatpak usando portales XDG (sin variables --env)
-sudo flatpak override --user --filesystem=xdg-config/gtk-3.0:ro
-sudo flatpak override --user --filesystem=xdg-config/gtk-4.0:ro
+sudo flatpak override --system --filesystem=xdg-config/gtk-3.0:ro
+sudo flatpak override --system --filesystem=xdg-config/gtk-4.0:ro
 
 # ------------------------------------------------------------------------------
 # 10. Copiar Script de UFW a NetworkManager Dispatcher

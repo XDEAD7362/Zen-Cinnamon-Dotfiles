@@ -165,3 +165,7 @@ ZSH_HIGHLIGHT_STYLES[path]='fg=blue,bold'
 
 # Cambiar color de los comentarios para que no sean invisibles
 ZSH_HIGHLIGHT_STYLES[comment]='fg=#888888,bold'
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/lauty/.local/bin:$PATH"
