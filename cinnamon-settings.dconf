@@ -4,16 +4,20 @@ command-history=['r']
 desktop-effects-close='traditional'
 desktop-effects-map='move'
 desktop-effects-minimize='fade'
-enabled-applets=['panel1:left:2:separator@cinnamon.org:1', 'panel1:left:3:grouped-window-list@cinnamon.org:2', 'panel1:right:4:systray@cinnamon.org:3', 'panel1:right:5:notifications@cinnamon.org:5', 'panel1:right:6:printers@cinnamon.org:6', 'panel1:right:8:network@cinnamon.org:10', 'panel1:right:9:sound@cinnamon.org:11', 'panel1:right:10:power@cinnamon.org:12', 'panel1:right:11:calendar@cinnamon.org:13', 'panel1:right:12:cornerbar@cinnamon.org:14', 'panel1:right:2:pomodoro@gregfreeman.org:16', 'panel1:right:7:xapp-status@cinnamon.org:19', 'panel1:left:0:classic-menu@fredcw:20']
+enabled-applets=['panel1:left:2:separator@cinnamon.org:1', 'panel1:left:3:grouped-window-list@cinnamon.org:2', 'panel1:right:5:systray@cinnamon.org:3', 'panel1:right:6:notifications@cinnamon.org:5', 'panel1:right:7:printers@cinnamon.org:6', 'panel1:right:9:network@cinnamon.org:10', 'panel1:right:10:sound@cinnamon.org:11', 'panel1:right:11:power@cinnamon.org:12', 'panel1:right:12:calendar@cinnamon.org:13', 'panel1:right:13:cornerbar@cinnamon.org:14', 'panel1:right:3:pomodoro@gregfreeman.org:16', 'panel1:right:8:xapp-status@cinnamon.org:19', 'panel1:left:0:classic-menu@fredcw:20']
 enabled-extensions=@as []
-next-applet-id=22
+next-applet-id=23
 panel-edit-mode=false
 panel-zone-symbolic-icon-sizes='[{"panelId": 1, "left": 28, "center": 28, "right": 16}]'
 panels-height=['1:40']
 window-effect-speed=0
 
 [desktop/background]
-picture-uri='file:///home/lauty/mountfujibackground.jpg'
+picture-uri='file:///media/lauty/Ventoy/mountfujibackground.jpg'
+
+[desktop/background/slideshow]
+delay=15
+image-source='xml:///usr/share/cinnamon-background-properties/linuxmint.xml'
 
 [desktop/input-sources]
 sources=[('xkb', 'latam')]
@@ -67,7 +71,7 @@ event-sounds=false
 [desktop/wm/preferences]
 auto-raise=false
 button-layout=':minimize,maximize,close'
-focus-mode='mouse'
+focus-mode='click'
 min-window-opacity=30
 titlebar-font='Inter Medium 10'
 
@@ -87,6 +91,7 @@ swipe-up-4='VOLUME_UP::end'
 tap-3='MEDIA_PLAY_PAUSE::end'
 
 [muffin]
+attach-modal-dialogs=true
 bring-windows-to-current-workspace=true
 draggable-border-width=10
 placement-mode='center'
@@ -95,7 +100,7 @@ placement-mode='center'
 numlock-state='on'
 
 [settings-daemon/plugins/color]
-night-light-last-coordinates=(-34.600000000000001, -58.450000000000003)
+night-light-last-coordinates=(-31.399999999999999, -64.183333000000005)
 
 [settings-daemon/plugins/power]
 button-power='interactive'
