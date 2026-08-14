@@ -13,7 +13,7 @@ panels-height=['1:40']
 window-effect-speed=0
 
 [desktop/background]
-picture-uri='file:///media/lauty/Ventoy/mountfujibackground.jpg'
+picture-uri='file:///home/lauty/mountfujibackground.jpg'
 
 [desktop/background/slideshow]
 delay=15
@@ -25,7 +25,7 @@ sources=[('xkb', 'latam')]
 [desktop/interface]
 cursor-blink-time=1200
 cursor-theme='Bibata-Modern-Classic'
-font-name='Inter 10'
+font-name='Inter Medium 10'
 gtk-theme='Orchis-Grey-Dark'
 icon-theme='Mint-Y-Yaru'
 text-scaling-factor=1.0
@@ -59,9 +59,10 @@ numlock-state=true
 repeat-interval=uint32 30
 
 [desktop/screensaver]
-default-message='Esperando... Zzz...'
+default-message=''
 font-time='Ubuntu Medium 64'
 layout-group=0
+lock-enabled=true
 time-format='%H:%M:%S'
 use-custom-format=true
 
@@ -73,7 +74,7 @@ auto-raise=false
 button-layout=':minimize,maximize,close'
 focus-mode='click'
 min-window-opacity=30
-titlebar-font='Inter Medium 10'
+titlebar-font='Oswald Semi-Bold 13'
 
 [gestures]
 swipe-down-2='PUSH_TILE_DOWN::end'
@@ -100,7 +101,7 @@ placement-mode='center'
 numlock-state='on'
 
 [settings-daemon/plugins/color]
-night-light-last-coordinates=(-31.399999999999999, -64.183333000000005)
+night-light-last-coordinates=(-34.600000000000001, -58.450000000000003)
 
 [settings-daemon/plugins/power]
 button-power='interactive'
