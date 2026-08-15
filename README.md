@@ -43,16 +43,17 @@ El script `install.sh` prioriza paquetes en formato **Flatpak**, repositorios of
 
 ```
 dotfiles/
-├── bin/                       # Scripts ejecutables personales (~/.local/bin)
-├── kitty/                     # Configuración de Kitty Terminal
-├── themes/                    # Temas visuales (Orchis, WhiteSur)
+├── .config/                   # Configuraciones de Kitty y Fastfetch
+├── .local/                    # Configuraciones de applets y fuentes
 ├── icons/                     # Temas de íconos (Mint-Y-Yaru)
+├── themes/                    # Temas visuales (Orchis, WhiteSur)
 ├── ufw-script/                # Script de reglas automáticas de UFW
-├── .zshrc                     # Configuración y alias de Zsh
-├── cinnamon-settings.dconf    # Volcado dconf de la interfaz gráfica
-├── install.sh                 # Script maestro de post-instalación
 ├── .gitignore                 # Reglas de exclusión para credenciales y datos sensibles
-└── README.md                  # Documentación del proyecto
+├── .zshrc                     # Configuración y alias de Zsh
+├── LICENSE                    # Licencia del proyecto
+├── README.md                  # Documentación del proyecto
+├── cinnamon-settings.dconf    # Volcado dconf de la interfaz gráfica
+└── install.sh                 # Script maestro de post-instalación
 ```
 
 ## ⚡ Instalación en un Sistema Nuevo (Linux Mint)
